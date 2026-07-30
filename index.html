@@ -7,7 +7,7 @@
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
 <meta content="yes" name="mobile-web-app-capable"/>
-<title>Backstage | Unified Dashboard</title>
+<title>Backstage Command Center</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -52,6 +52,7 @@
         min-height: 100dvh;
         margin: 0;
         padding: 0;
+        overflow: hidden;
       }
       
       h1, h2, h3, h4, h5, h6, .font-heading {
@@ -83,15 +84,9 @@
       /* Splash Animations */
       @keyframes logo-pulse {
         0%, 100% { transform: scale(1); filter: brightness(1); }
-        50% { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 15px #9D4EDD); }
+        50% { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 20px rgba(157, 78, 221, 0.6)); }
       }
-      @keyframes glitch {
-        0% { clip-path: inset(0 0 0 0); }
-        2% { clip-path: inset(44% 0 1% 0); transform: translate(-5px); }
-        4% { clip-path: inset(10% 0 60% 0); transform: translate(5px); }
-        7% { clip-path: inset(0 0 0 0); transform: translate(0); }
-      }
-      .animate-logo { animation: logo-pulse 3s infinite ease-in-out, glitch 8s infinite steps(1); }
+      .animate-logo { animation: logo-pulse 3s infinite ease-in-out; }
 
       /* Background Shader */
       .bg-shader {
@@ -101,16 +96,8 @@
         background: radial-gradient(circle at 50% 50%, #1a1025 0%, #0a0a0b 100%);
         opacity: 0.6;
       }
-      .bg-shader::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(#9D4EDD 0.5px, transparent 0.5px);
-        background-size: 24px 24px;
-        opacity: 0.1;
-      }
 
-      /* Map & Navigation Visuals */
+      /* Navigation Visuals */
       .map-placeholder {
         background-color: #1a1a1f;
         background-image: 
@@ -147,11 +134,11 @@
       ::-webkit-scrollbar-thumb { background: #2C2D35; border-radius: 2px; }
     </style>
 </head>
-<body class="bg-background-dark text-on-surface h-screen flex flex-col overflow-hidden">
+<body class="bg-background-dark text-on-surface h-screen flex flex-col">
 <!-- SPLASH SCREEN -->
 <div class="fixed inset-0 z-[100] bg-background-dark flex flex-col items-center justify-center transition-opacity duration-700" id="splash-screen">
-<div class="relative size-48 md:size-64 mb-8">
-<img alt="Backstage" class="w-full h-full object-contain animate-logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKOi061hRbVRyylVkhVhty7KD9Rvn4DcMrUHhpFNxcnS1eMaFbRQrJooAAcJoBpOjcz4IwID_74uT8WwilVzP7p0sbid37NqBa7Y2NNkRQNYiWuJYYg0Eul1xKvz9oraz6ZdxuZbprSvIKcnFJQMMjrHzR98ILMaHEINsxtdNHdFjkNoKLgqejB5DZkuUWpSijJ2SMWL_F0CejxRaWLsChspEN8Ek3y0d9b1yGmqDBCm5kcdabQDVeJiO3geRuumqkIw"/>
+<div class="relative size-64 mb-8">
+<img alt="Backstage Radiant Pulse" class="w-full h-full object-contain animate-logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA44CCvxXNrSjhvBZbscA-mMe_v36F83D3uzSl1lccdLzwL53m-zaaTw8Kh8MTwaveat7Uh5yrf4NUsCFTNw7b4CTLU67TRZ8enHqwBBdwZMG-vabN-_6lkGJUQ4O3YFv1NGitBfyRE-x0ZsDnEkRNq_2900zdyJdtb_iYPxhAS15GAJfLYG9dztMtELX84JhUSyYNn_4RKbrwPsff3kepUDwwkO2VPeeqVgc54KG94MilxnyDo7s51OBD32rBpuCSJrw"/>
 </div>
 <div class="flex flex-col items-center gap-4">
 <h1 class="text-3xl font-heading font-bold tracking-[0.2em] text-white">BACKSTAGE</h1>
@@ -164,18 +151,18 @@
 </div>
 </div>
 <div class="bg-shader"></div>
-<!-- MAIN APP WRAPPER (HIDDEN INITIALLY) -->
-<div class="flex flex-col h-full opacity-0 transition-opacity duration-1000" id="main-app">
+<!-- MAIN APP WRAPPER -->
+<div class="flex flex-col h-full opacity-0 transition-opacity duration-1000 overflow-hidden" id="main-app">
 <!-- Header -->
-<header class="h-16 flex items-center justify-between px-4 border-b border-border-dark bg-background-dark/80 backdrop-blur-md shrink-0 z-50 sticky top-0">
+<header class="h-16 flex items-center justify-between px-4 border-b border-border-dark bg-background-dark/80 backdrop-blur-md shrink-0 z-50">
 <div class="flex items-center gap-3">
 <div class="size-10 bg-surface border border-border-dark flex items-center justify-center overflow-hidden rounded-sm">
-<img alt="Backstage Logo" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNAA9mvEC3oGVmyh8QXlR2ovj3x8apEc7LoerTDur6oCQ6urPrWhytF8ZnhWH7JJYKbyhXdD2Z3sM2w-EX8Hadx_NcDHCQmxVDxFt4UFZ8GT9a_5KBlfEFYGzc-hDijokFhjWRgZRQcmgSGRTxXocRrqOBcXk0O5-nup9Gd0g8cO8kqe21i9Xb5xAQv9B-CFfsXYC06s2fHhBuAPPInoBsbJ2NJZc3d_AYutktRFT0EN24GtQa_blm9mGW8aRc2OCAVQ"/>
+<img alt="Backstage Logo" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbH0ErcWz5dViBSy9OnjZaFRKN1yfWKqInBmKshWYLd5ytGTHtIKb54xCMoENdASMa8CyaAuugdj7aypCGb4ITza82-US7ubHdiZUYLGG9z98FatuYR61LrdXVcH6nQLg3QiMwg5QvVV5RKLUbiRGgbo0GbvIN4DRWixgpbndibpT1A0SL4p1W-QC51_tb0IQXJP5iLi67C8bgzchRbUErdTSrPI2SYDvOZFpYqW-IZp3HeXv_egveMvfsTTzdE5g6IA"/>
 </div>
 <h1 class="font-heading font-bold text-lg tracking-tighter">BACKSTAGE</h1>
 </div>
 <div class="flex items-center gap-4">
-<button class="relative size-10 flex items-center justify-center bg-surface border border-border-dark hover:border-muted transition-colors rounded-sm" onclick="showView('comms')">
+<button class="relative size-10 flex items-center justify-center bg-surface border border-border-dark rounded-sm" onclick="showView('comms')">
 <span class="material-symbols-outlined text-muted text-[20px]">chat</span>
 <span class="absolute top-2 right-2 size-2 bg-accent rounded-full border border-background-dark"></span>
 </button>
@@ -186,7 +173,7 @@
 </div>
 </header>
 <!-- View Container Root -->
-<main class="flex-1 overflow-y-auto overflow-x-hidden relative pb-32" id="view-root">
+<main class="flex-1 overflow-y-auto relative pb-20" id="view-root">
 <!-- 1: Overview Dashboard -->
 <section class="view-container active flex-col gap-6 p-4" id="view-overview">
 <div class="flex flex-col gap-3">
@@ -194,10 +181,10 @@
 <h2 class="font-heading font-bold text-xs tracking-widest uppercase text-muted">Next Event</h2>
 <span class="text-[10px] font-bold text-primary uppercase">In 4 Hours</span>
 </div>
-<div class="bg-surface border border-border-dark border-l-4 border-l-accent-purple p-4 flex flex-col gap-4 relative overflow-hidden group cursor-pointer hover:bg-surface-container transition-colors" onclick="showView('plan')">
+<div class="bg-surface border border-border-dark border-l-4 border-l-accent-purple p-4 flex flex-col gap-4 relative overflow-hidden group cursor-pointer" onclick="showView('plan')">
 <div class="flex flex-col gap-1 z-10">
 <p class="number-stat text-xs text-accent">20:00 - 23:30</p>
-<h3 class="font-heading font-bold text-xl tracking-tight text-white group-hover:text-primary transition-colors">Neon Gala Showcase</h3>
+<h3 class="font-heading font-bold text-xl tracking-tight text-white">Neon Gala Showcase</h3>
 <p class="text-muted text-[11px] flex items-center gap-1.5 mt-1">
 <span class="material-symbols-outlined text-[14px]">location_on</span>
                                 The Grand Atrium, Downtown
@@ -212,8 +199,8 @@
 </div>
 </div>
 </div>
-<!-- Now Playing Widget -->
-<div class="bg-surface border border-border-dark p-4 flex items-center gap-4 cursor-pointer hover:bg-surface-container transition-all" onclick="showView('player')">
+<!-- Active Media Widget -->
+<div class="bg-surface border border-border-dark p-4 flex items-center gap-4 cursor-pointer" onclick="showView('player')">
 <div class="size-12 bg-accent-purple/20 flex items-center justify-center rounded-sm">
 <span class="material-symbols-outlined text-primary">play_arrow</span>
 </div>
@@ -225,14 +212,14 @@
 </div>
 </div>
 </div>
-<!-- Stats Grid -->
+<!-- Quick Stats Grid -->
 <section class="grid grid-cols-2 gap-3">
-<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-28 cursor-pointer" onclick="showView('data')">
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-28" onclick="showView('data')">
 <p class="text-muted text-[10px] font-bold uppercase tracking-widest">Views</p>
 <p class="number-stat text-2xl font-bold">2,481</p>
-<div class="h-0.5 bg-accent/30 w-full mt-2"><div class="bg-accent h-full w-2/3"></div></div>
+<div class="h-1 bg-border-dark w-full mt-2"><div class="bg-accent h-full w-2/3"></div></div>
 </div>
-<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-28 cursor-pointer" onclick="showView('leads')">
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-28">
 <p class="text-muted text-[10px] font-bold uppercase tracking-widest">Leads</p>
 <div class="flex items-baseline gap-2">
 <p class="number-stat text-2xl font-bold">14</p>
@@ -240,20 +227,16 @@
 </div>
 </div>
 </section>
-<!-- Quick Actions -->
-<div class="grid grid-cols-3 gap-2">
-<button class="bg-surface border border-border-dark p-3 flex flex-col items-center gap-2" onclick="showView('gear')">
-<span class="material-symbols-outlined text-muted">inventory_2</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Gear</span>
-</button>
-<button class="bg-surface border border-border-dark p-3 flex flex-col items-center gap-2" onclick="showView('weather')">
-<span class="material-symbols-outlined text-muted">navigation</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Nav</span>
-</button>
-<button class="bg-surface border border-border-dark p-3 flex flex-col items-center gap-2" onclick="showView('proposal')">
-<span class="material-symbols-outlined text-muted">description</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Proposal</span>
-</button>
+<!-- Navigation Intelligence Shortcut -->
+<div class="bg-surface border border-border-dark p-4 rounded-sm" onclick="showView('weather')">
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-[10px] font-bold uppercase tracking-widest text-muted">Route Intel</h3>
+<span class="text-[9px] bg-error-container/20 text-error px-1.5 py-0.5 border border-error/30 rounded-sm">DETOUR ACTIVE</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-accent">navigation</span>
+<p class="text-xs">Optimized route found for <span class="text-white font-bold">Downtown Venue</span>. Avoiding Broadway congestion.</p>
+</div>
 </div>
 </section>
 <!-- 2: Analytics -->
@@ -265,11 +248,11 @@
 </div>
 <div class="grid gap-2">
 <div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
-<span class="text-xs">Conversion Rate</span>
+<span class="text-xs uppercase font-bold text-muted">Conversion Rate</span>
 <span class="number-stat text-accent text-lg">12.4%</span>
 </div>
 <div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
-<span class="text-xs">Engagement Score</span>
+<span class="text-xs uppercase font-bold text-muted">Engagement Score</span>
 <span class="number-stat text-primary text-lg">88/100</span>
 </div>
 </div>
@@ -286,23 +269,13 @@
 <p class="number-stat text-[10px] text-muted">FRI 19:00</p>
 <p class="font-bold text-sm">Corporate Gala - Main Stage</p>
 </div>
-</div>
-</section>
-<!-- 4: Operations -->
-<section class="view-container flex-col gap-4 p-4" id="view-ops">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Ops &amp; Tasks</h2>
-<div class="flex flex-col gap-2">
-<div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm">
-<input class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
-<span class="text-sm">Review Rider Requirements</span>
-</div>
-<div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm">
-<input checked="" class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
-<span class="text-sm line-through text-muted">Finalize lighting cues (Scene 4)</span>
+<div class="bg-surface border-l-2 border-accent p-4">
+<p class="number-stat text-[10px] text-accent">SAT 21:00</p>
+<p class="font-bold text-sm">Midnight Sessions - Warehouse B</p>
 </div>
 </div>
 </section>
-<!-- 5: Media Player -->
+<!-- 4: Media Player -->
 <section class="view-container flex-col gap-4 p-4 h-full" id="view-player">
 <div class="flex justify-between items-center">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Media Engine</h2>
@@ -312,66 +285,80 @@
 </div>
 </div>
 <div class="relative w-full aspect-video bg-black border border-border-dark group media-pulse-active overflow-hidden">
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" class="absolute inset-0 size-full" frameborder="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?controls=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0" title="YouTube video player"></iframe>
-<div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-<div class="flex justify-end">
-<span class="bg-background-dark/80 px-2 py-1 text-[10px] font-mono border border-border-dark text-accent">LIVE 1080P</span>
-</div>
-<div>
+<iframe class="absolute inset-0 size-full" frameborder="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?controls=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0"></iframe>
+<div class="absolute inset-0 pointer-events-none flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 to-transparent">
 <h3 class="text-sm font-bold text-white mb-1">Backstage Stream Feed</h3>
-<div class="w-full h-0.5 bg-white/20">
-<div class="w-2/3 h-full bg-accent"></div>
-</div>
-</div>
+<div class="w-full h-0.5 bg-white/20"><div class="w-2/3 h-full bg-accent"></div></div>
 </div>
 </div>
 <div class="bg-surface border border-border-dark p-6 text-center">
 <div class="mb-4 flex justify-center gap-8">
-<button class="material-symbols-outlined text-muted hover:text-white">shuffle</button>
-<button class="material-symbols-outlined text-muted hover:text-white text-3xl">skip_previous</button>
-<button class="size-12 bg-white text-background-dark rounded-full flex items-center justify-center hover:bg-accent transition-colors"><span class="material-symbols-outlined text-3xl">play_arrow</span></button>
-<button class="material-symbols-outlined text-muted hover:text-white text-3xl">skip_next</button>
-<button class="material-symbols-outlined text-muted hover:text-white">repeat</button>
+<button class="material-symbols-outlined text-muted">shuffle</button>
+<button class="material-symbols-outlined text-muted text-3xl">skip_previous</button>
+<button class="size-12 bg-white text-background-dark rounded-full flex items-center justify-center"><span class="material-symbols-outlined text-3xl">play_arrow</span></button>
+<button class="material-symbols-outlined text-muted text-3xl">skip_next</button>
+<button class="material-symbols-outlined text-muted">repeat</button>
 </div>
-<p class="text-xs text-muted font-bold tracking-widest uppercase mb-1">Now Playing from Cloud</p>
+<p class="text-xs text-muted font-bold tracking-widest uppercase mb-1">Now Playing</p>
 <h4 class="font-heading font-bold text-xl text-white">Cybernetic Harmony Vol. 4</h4>
+</div>
+</section>
+<!-- 5: Operations -->
+<section class="view-container flex-col gap-4 p-4" id="view-ops">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Ops &amp; Tasks</h2>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm">
+<input class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-sm">Review Rider Requirements</span>
+</div>
+<div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm opacity-60">
+<input checked="" class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-sm line-through">Finalize lighting cues (Scene 4)</span>
+</div>
 </div>
 </section>
 <!-- 6: Navigation Intel -->
 <section class="view-container flex-col gap-4 p-4" id="view-weather">
-<div class="flex justify-between items-end">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Navigation Intel</h2>
-<span class="number-stat text-[10px] text-accent font-bold">FLOOD &amp; SEISMIC ACTIVE</span>
-</div>
-<div class="relative w-full aspect-square border border-border-dark map-placeholder overflow-hidden rounded-sm group">
-<div class="absolute top-3 left-3 z-20 bg-background-dark/90 border border-border-dark p-2 flex flex-col gap-1 max-w-[180px]">
+<div class="relative w-full aspect-square border border-border-dark map-placeholder overflow-hidden rounded-sm">
+<div class="absolute top-3 left-3 z-20 bg-background-dark/90 border border-border-dark p-2 flex flex-col gap-1">
 <div class="flex items-center gap-2">
 <span class="size-2 bg-accent rounded-full pulse-marker"></span>
 <p class="text-[10px] font-bold uppercase tracking-widest text-accent">Route Optimized</p>
 </div>
-<p class="text-[9px] text-muted">Avoiding heavy congestion on Broadway Ave.</p>
 </div>
-<div class="absolute bottom-3 right-3 left-3 z-20 bg-error-container/80 border border-error p-3 flex items-center gap-3 animate-pulse">
+<div class="absolute bottom-3 right-3 left-3 z-20 bg-error-container/90 border border-error p-3 flex items-center gap-3 animate-pulse">
 <span class="material-symbols-outlined text-white">warning</span>
-<div class="flex-1">
-<p class="text-[10px] font-bold text-white uppercase tracking-tighter">Detour Alert: Road Closure</p>
+<div>
+<p class="text-[10px] font-bold text-white uppercase">Detour Alert: Broadway Closure</p>
 <p class="text-[9px] text-white/80">+12min expected delay on current path.</p>
 </div>
 </div>
-<svg class="absolute inset-0 size-full opacity-30" viewbox="0 0 100 100">
-<path d="M10,20 L40,20 L40,80 L90,80" fill="none" stroke="#2C2D35" stroke-width="2"></path>
-<path d="M0,50 L100,50" fill="none" stroke="#2C2D35" stroke-width="1"></path>
-<path d="M50,0 L50,100" fill="none" stroke="#2C2D35" stroke-width="1"></path>
-<path d="M20,10 C20,10 20,40 50,40 C80,40 80,90 80,90" fill="none" stroke="#e0b6ff" stroke-dasharray="2 1" stroke-width="3"></path>
+<!-- Mock Path SVG -->
+<svg class="absolute inset-0 size-full opacity-40" viewbox="0 0 100 100">
+<path d="M20,10 C20,10 20,40 50,40 C80,40 80,90 80,90" fill="none" stroke="#e0b6ff" stroke-dasharray="2 1" stroke-width="2"></path>
 </svg>
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-<div class="size-4 bg-accent rounded-full border-2 border-background-dark shadow-[0_0_15px_rgba(0,245,212,0.5)]"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="size-4 bg-accent rounded-full border-2 border-background-dark shadow-[0_0_15px_#00F5D4]"></div>
+</div>
+</div>
+<div class="bg-surface border border-border-dark p-4">
+<h3 class="text-xs font-bold uppercase text-muted mb-2">Environmental Logistics</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted">device_thermostat</span>
+<span class="number-stat text-sm">22°C Clear</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted">air</span>
+<span class="number-stat text-sm">12km/h NW</span>
+</div>
 </div>
 </div>
 </section>
 <!-- 7: Gear Tracker -->
 <section class="view-container flex-col gap-4 p-4" id="view-gear">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Equipment Tracker</h2>
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Equipment Inventory</h2>
 <div class="flex flex-col gap-2">
 <div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
 <div>
@@ -391,13 +378,15 @@
 </section>
 <!-- 8: Leads -->
 <section class="view-container flex-col gap-4 p-4" id="view-leads">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Pipeline</h2>
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Leads Pipeline</h2>
+<div class="flex flex-col gap-3">
 <div class="bg-surface border-l-2 border-accent p-4">
 <div class="flex justify-between items-start">
 <h4 class="font-bold text-sm">Summer Solstice Gala</h4>
 <span class="number-stat text-[10px] bg-accent/10 text-accent px-2 py-0.5">$8,200</span>
 </div>
 <p class="text-xs text-muted mt-1">Proposal Stage • Due Fri</p>
+</div>
 </div>
 </section>
 <!-- 9: Proposal Builder -->
@@ -419,7 +408,7 @@
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Messenger</h2>
 </div>
 <div class="flex-1 overflow-y-auto">
-<div class="p-4 border-b border-border-dark flex gap-4 hover:bg-surface transition-colors cursor-pointer">
+<div class="p-4 border-b border-border-dark flex gap-4 hover:bg-surface">
 <div class="size-10 bg-accent-purple/20 border border-accent-purple flex items-center justify-center shrink-0 font-bold">SC</div>
 <div class="flex-1 min-w-0">
 <div class="flex justify-between items-baseline mb-1">
@@ -435,23 +424,23 @@
 <!-- Navigation Chrome -->
 <nav class="fixed bottom-0 left-0 right-0 bg-background-dark/95 backdrop-blur-md border-t border-border-dark z-40 safe-area-bottom">
 <div class="flex h-16 items-center">
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-primary transition-all active:scale-90" data-view="overview" onclick="showView('overview')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-primary" data-view="overview" onclick="showView('overview')">
 <span class="material-symbols-outlined text-[24px]">grid_view</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">Dash</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="player" onclick="showView('player')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="player" onclick="showView('player')">
 <span class="material-symbols-outlined text-[24px]">play_circle</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">Media</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="data" onclick="showView('data')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="data" onclick="showView('data')">
 <span class="material-symbols-outlined text-[24px]">insights</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">Stats</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="plan" onclick="showView('plan')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="plan" onclick="showView('plan')">
 <span class="material-symbols-outlined text-[24px]">calendar_month</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">Plan</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" onclick="toggleMoreMenu(true)">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" onclick="toggleMoreMenu(true)">
 <span class="material-symbols-outlined text-[24px]">more_horiz</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">More</span>
 </button>
@@ -460,46 +449,42 @@
 <!-- Slide-out More Menu -->
 <div class="fixed inset-0 z-50 pointer-events-none transition-all duration-300" id="more-menu">
 <div class="absolute inset-0 bg-background-dark/80 opacity-0 transition-opacity duration-300" id="menu-overlay" onclick="toggleMoreMenu(false)"></div>
-<div class="absolute right-0 top-0 bottom-0 w-64 bg-surface border-l border-border-dark translate-x-full transition-transform duration-300 pointer-events-auto p-6 flex flex-col gap-6" id="menu-content">
-<div class="flex justify-between items-center border-b border-border-dark pb-4">
+<div class="absolute right-0 top-0 bottom-0 w-64 bg-surface border-l border-border-dark translate-x-full transition-transform duration-300 pointer-events-auto p-6 flex flex-col" id="menu-content">
+<div class="flex justify-between items-center border-b border-border-dark pb-4 mb-4">
 <div class="flex items-center gap-2">
-<img alt="Logo" class="size-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBMKWcwSDE5SQs8eVa154nrTwJioyZYbGcllrVkhK7_wi5FOQ-cJfjruJNpv7rhrSjdSGYeo_kHu3mJDOXNG-V3dQrH7gRg-H8GNoK2cPzaG931RuoYLAVpqSMxgckdft5XzQzyxlhIvIUogbjaKV0POVnAPuiaa6zUknDpYoUeWJPvnH_WNm7ze-hsU9L2gSbgnxL5YF3ESpcJ5Il-s8DZSeud2eX-o8pHHyikt8GCi6lHMKU4hFdjoSiAjKYx1b7Yw"/>
+<img alt="System" class="size-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM0aqKLeDBvJfJHmjrEtRGTSOJbYdqpiB6CNRwS0e4AyXVOLFme2oHvQusVFYbXkjWXC5V4wCvO2a57hLeU78jhAza37c4Dod63WA6FNKv0ZYmgCa7YZ9xkSlCiYeU-fIDr3LTZdi58Bl4nIctQsZkJUexWRj_Sved9DaedCsHorZC4pSmnQAfmu6zhHGfuOb6DJ6yHrYN2Yc9rxBgVPqTcHQJzuo2yGoBQknlVtgGnTMwu3HqhJyJEc3B0CLkwFJ3Sw"/>
 <h3 class="font-heading font-bold text-lg uppercase tracking-tight">System</h3>
 </div>
 <button class="size-10 flex items-center justify-center text-muted" onclick="toggleMoreMenu(false)"><span class="material-symbols-outlined">close</span></button>
 </div>
 <nav class="flex flex-col gap-1">
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('weather'); toggleMoreMenu(false)">
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left rounded-sm" onclick="showView('weather'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">navigation</span>
 <span class="text-sm font-medium">Nav &amp; Intel</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('gear'); toggleMoreMenu(false)">
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left rounded-sm" onclick="showView('gear'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">inventory_2</span>
 <span class="text-sm font-medium">Gear Tracker</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('leads'); toggleMoreMenu(false)">
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left rounded-sm" onclick="showView('leads'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">person_search</span>
 <span class="text-sm font-medium">Leads Pipeline</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('proposal'); toggleMoreMenu(false)">
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left rounded-sm" onclick="showView('proposal'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">description</span>
 <span class="text-sm font-medium">Proposal Builder</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('ops'); toggleMoreMenu(false)">
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left rounded-sm" onclick="showView('ops'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">fact_check</span>
 <span class="text-sm font-medium">Ops &amp; Tasks</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('comms'); toggleMoreMenu(false)">
-<span class="material-symbols-outlined text-muted">chat</span>
-<span class="text-sm font-medium">Messenger</span>
-</button>
 </nav>
-<div class="mt-auto border-t border-border-dark pt-4 flex flex-col gap-2">
-<p class="text-[10px] text-muted text-center uppercase tracking-widest font-mono">BACKSTAGE v2.4.0.BETA</p>
-<div class="flex justify-center gap-2">
+<div class="mt-auto pt-4 border-t border-border-dark text-center">
+<p class="text-[10px] text-muted uppercase tracking-widest font-mono">Backstage v2.4.0</p>
+<div class="flex justify-center gap-2 mt-2">
 <span class="size-2 rounded-full bg-accent animate-pulse"></span>
 <span class="size-2 rounded-full bg-primary animate-pulse" style="animation-delay: 0.5s"></span>
-<span class="size-2 rounded-full bg-muted animate-pulse" style="animation-delay: 1s"></span>
+<span class="size-2 rounded-full bg-muted"></span>
 </div>
 </div>
 </div>
@@ -507,13 +492,12 @@
 </div>
 <script>
         /**
-         * Splash Screen Controller
+         * App Splash Controller
          */
-        function handleSplashScreen() {
+        function initApp() {
             const splash = document.getElementById('splash-screen');
             const mainApp = document.getElementById('main-app');
             
-            // Artificial delay for high-impact splash effect
             setTimeout(() => {
                 splash.classList.add('opacity-0');
                 mainApp.classList.remove('opacity-0');
@@ -526,21 +510,20 @@
         }
 
         /**
-         * View Controller - Robust SPA Logic
+         * View Controller
          */
         function showView(viewId) {
-            // 1. Manage Active States for Containers
+            // Manage Active States for View Containers
             const views = document.querySelectorAll('.view-container');
             views.forEach(v => v.classList.remove('active'));
 
             const target = document.getElementById(`view-${viewId}`);
             if (target) {
                 target.classList.add('active');
-                // Scroll to top on transition
                 document.getElementById('view-root').scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            // 2. Manage Bottom Nav active state
+            // Manage Bottom Nav active state
             const navItems = document.querySelectorAll('.nav-item');
             navItems.forEach(item => {
                 if (item.getAttribute('data-view') === viewId) {
@@ -554,7 +537,7 @@
         }
 
         /**
-         * Side Menu Toggle
+         * Menu Toggle
          */
         function toggleMoreMenu(isOpen) {
             const menu = document.getElementById('more-menu');
@@ -572,10 +555,6 @@
             }
         }
 
-        // Initialize App
-        window.addEventListener('DOMContentLoaded', () => {
-            handleSplashScreen();
-            showView('overview');
-        });
+        window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body></html>
