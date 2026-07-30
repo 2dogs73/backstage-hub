@@ -4,7 +4,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta content="#0A0A0B" name="theme-color"/>
-<title>Backstage SPA | Unified Dashboard</title>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<title>Backstage | Unified Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -47,6 +50,8 @@
         user-select: none;
         -webkit-tap-highlight-color: transparent;
         min-height: 100dvh;
+        margin: 0;
+        padding: 0;
       }
       
       h1, h2, h3, h4, h5, h6, .font-heading {
@@ -61,6 +66,7 @@
         padding-bottom: env(safe-area-inset-bottom, 0px);
       }
 
+      /* View Transitions */
       .view-container {
         display: none;
         animation: fadeIn 0.3s ease-out forwards;
@@ -70,10 +76,24 @@
       }
 
       @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
+        from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
       }
 
+      /* Splash Animations */
+      @keyframes logo-pulse {
+        0%, 100% { transform: scale(1); filter: brightness(1); }
+        50% { transform: scale(1.05); filter: brightness(1.2) drop-shadow(0 0 15px #9D4EDD); }
+      }
+      @keyframes glitch {
+        0% { clip-path: inset(0 0 0 0); }
+        2% { clip-path: inset(44% 0 1% 0); transform: translate(-5px); }
+        4% { clip-path: inset(10% 0 60% 0); transform: translate(5px); }
+        7% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      }
+      .animate-logo { animation: logo-pulse 3s infinite ease-in-out, glitch 8s infinite steps(1); }
+
+      /* Background Shader */
       .bg-shader {
         position: fixed;
         inset: 0;
@@ -90,6 +110,7 @@
         opacity: 0.1;
       }
 
+      /* Map & Navigation Visuals */
       .map-placeholder {
         background-color: #1a1a1f;
         background-image: 
@@ -101,9 +122,6 @@
       @keyframes pulse-ring {
         0% { transform: scale(.33); opacity: 1; }
         80%, 100% { opacity: 0; }
-      }
-      .pulse-marker {
-        position: relative;
       }
       .pulse-marker::before {
         content: '';
@@ -117,18 +135,42 @@
         animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
       }
 
+      /* Media Pulse Animation */
+      @keyframes music-pulse {
+        0%, 100% { box-shadow: inset 0 0 40px rgba(157, 78, 221, 0.1); }
+        50% { box-shadow: inset 0 0 100px rgba(0, 245, 212, 0.2); }
+      }
+      .media-pulse-active { animation: music-pulse 4s infinite ease-in-out; }
+
       ::-webkit-scrollbar { width: 4px; }
       ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb { background: #2C2D35; border-radius: 2px; }
     </style>
 </head>
 <body class="bg-background-dark text-on-surface h-screen flex flex-col overflow-hidden">
+<!-- SPLASH SCREEN -->
+<div class="fixed inset-0 z-[100] bg-background-dark flex flex-col items-center justify-center transition-opacity duration-700" id="splash-screen">
+<div class="relative size-48 md:size-64 mb-8">
+<img alt="Backstage" class="w-full h-full object-contain animate-logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKOi061hRbVRyylVkhVhty7KD9Rvn4DcMrUHhpFNxcnS1eMaFbRQrJooAAcJoBpOjcz4IwID_74uT8WwilVzP7p0sbid37NqBa7Y2NNkRQNYiWuJYYg0Eul1xKvz9oraz6ZdxuZbprSvIKcnFJQMMjrHzR98ILMaHEINsxtdNHdFjkNoKLgqejB5DZkuUWpSijJ2SMWL_F0CejxRaWLsChspEN8Ek3y0d9b1yGmqDBCm5kcdabQDVeJiO3geRuumqkIw"/>
+</div>
+<div class="flex flex-col items-center gap-4">
+<h1 class="text-3xl font-heading font-bold tracking-[0.2em] text-white">BACKSTAGE</h1>
+<div class="flex gap-1">
+<div class="size-1 bg-accent animate-bounce"></div>
+<div class="size-1 bg-accent animate-bounce" style="animation-delay: 0.2s"></div>
+<div class="size-1 bg-accent animate-bounce" style="animation-delay: 0.4s"></div>
+</div>
+<p class="text-[10px] uppercase tracking-widest text-muted mt-4">Initializing Systems...</p>
+</div>
+</div>
 <div class="bg-shader"></div>
-<!-- Unified Header -->
+<!-- MAIN APP WRAPPER (HIDDEN INITIALLY) -->
+<div class="flex flex-col h-full opacity-0 transition-opacity duration-1000" id="main-app">
+<!-- Header -->
 <header class="h-16 flex items-center justify-between px-4 border-b border-border-dark bg-background-dark/80 backdrop-blur-md shrink-0 z-50 sticky top-0">
 <div class="flex items-center gap-3">
 <div class="size-10 bg-surface border border-border-dark flex items-center justify-center overflow-hidden rounded-sm">
-<img alt="Backstage Logo" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLu04ubWoRMsnZ3YiuNyRXT5IC8vmwM69jb2Q1udZIFWABDNy4U4zBLtP9IUnyJduLqCdyCabsTOZ-pjpzkV5wj_OUTDg1QbtGJl58_I5uUFG2ag3up2KHYFdgq0A-Qi6SJoFh8bIQWTEQDnoQWTrT3YbYaP9P9C54sZYZ-n9boYrKIc42KB23azijoWjSu5OgDP15WQB8eG9XCKbI2h3DcARZp1YU1P7XfH8lrTWq_v6scGaopmaM8s08s"/>
+<img alt="Backstage Logo" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNAA9mvEC3oGVmyh8QXlR2ovj3x8apEc7LoerTDur6oCQ6urPrWhytF8ZnhWH7JJYKbyhXdD2Z3sM2w-EX8Hadx_NcDHCQmxVDxFt4UFZ8GT9a_5KBlfEFYGzc-hDijokFhjWRgZRQcmgSGRTxXocRrqOBcXk0O5-nup9Gd0g8cO8kqe21i9Xb5xAQv9B-CFfsXYC06s2fHhBuAPPInoBsbJ2NJZc3d_AYutktRFT0EN24GtQa_blm9mGW8aRc2OCAVQ"/>
 </div>
 <h1 class="font-heading font-bold text-lg tracking-tighter">BACKSTAGE</h1>
 </div>
@@ -143,9 +185,10 @@
 </div>
 </div>
 </header>
-<main class="flex-1 overflow-y-auto overflow-x-hidden relative" id="view-root">
-<!-- 1: Overview -->
-<section class="view-container active flex-col gap-6 p-4 pb-24" id="view-overview">
+<!-- View Container Root -->
+<main class="flex-1 overflow-y-auto overflow-x-hidden relative pb-32" id="view-root">
+<!-- 1: Overview Dashboard -->
+<section class="view-container active flex-col gap-6 p-4" id="view-overview">
 <div class="flex flex-col gap-3">
 <div class="flex items-center justify-between">
 <h2 class="font-heading font-bold text-xs tracking-widest uppercase text-muted">Next Event</h2>
@@ -157,8 +200,8 @@
 <h3 class="font-heading font-bold text-xl tracking-tight text-white group-hover:text-primary transition-colors">Neon Gala Showcase</h3>
 <p class="text-muted text-[11px] flex items-center gap-1.5 mt-1">
 <span class="material-symbols-outlined text-[14px]">location_on</span>
-                        The Grand Atrium, Downtown
-                    </p>
+                                The Grand Atrium, Downtown
+                            </p>
 </div>
 <div class="flex items-center gap-3 pt-3 border-t border-border-dark/50 z-10">
 <div class="flex -space-x-1.5">
@@ -169,6 +212,7 @@
 </div>
 </div>
 </div>
+<!-- Now Playing Widget -->
 <div class="bg-surface border border-border-dark p-4 flex items-center gap-4 cursor-pointer hover:bg-surface-container transition-all" onclick="showView('player')">
 <div class="size-12 bg-accent-purple/20 flex items-center justify-center rounded-sm">
 <span class="material-symbols-outlined text-primary">play_arrow</span>
@@ -181,6 +225,7 @@
 </div>
 </div>
 </div>
+<!-- Stats Grid -->
 <section class="grid grid-cols-2 gap-3">
 <div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-28 cursor-pointer" onclick="showView('data')">
 <p class="text-muted text-[10px] font-bold uppercase tracking-widest">Views</p>
@@ -195,6 +240,7 @@
 </div>
 </div>
 </section>
+<!-- Quick Actions -->
 <div class="grid grid-cols-3 gap-2">
 <button class="bg-surface border border-border-dark p-3 flex flex-col items-center gap-2" onclick="showView('gear')">
 <span class="material-symbols-outlined text-muted">inventory_2</span>
@@ -211,11 +257,11 @@
 </div>
 </section>
 <!-- 2: Analytics -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-data">
+<section class="view-container flex-col gap-4 p-4" id="view-data">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Performance Data</h2>
 <div class="bg-surface border border-border-dark p-4 aspect-video flex flex-col items-center justify-center text-muted">
 <span class="material-symbols-outlined text-4xl mb-2">monitoring</span>
-<p class="text-[10px] uppercase tracking-widest">Real-time engagement graph</p>
+<p class="text-[10px] uppercase tracking-widest text-center">Real-time engagement graph<br/><span class="text-accent">Live from server 04</span></p>
 </div>
 <div class="grid gap-2">
 <div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
@@ -229,7 +275,7 @@
 </div>
 </section>
 <!-- 3: Schedule -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-plan">
+<section class="view-container flex-col gap-4 p-4" id="view-plan">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Event Timeline</h2>
 <div class="flex flex-col gap-3">
 <div class="bg-surface border-l-2 border-primary p-4">
@@ -243,7 +289,7 @@
 </div>
 </section>
 <!-- 4: Operations -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-ops">
+<section class="view-container flex-col gap-4 p-4" id="view-ops">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Ops &amp; Tasks</h2>
 <div class="flex flex-col gap-2">
 <div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm">
@@ -251,134 +297,22 @@
 <span class="text-sm">Review Rider Requirements</span>
 </div>
 <div class="flex items-center gap-4 bg-surface border border-border-dark p-4 rounded-sm">
-<input class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
-<span class="text-sm">Finalize lighting cues (Scene 4)</span>
+<input checked="" class="form-checkbox size-5 bg-background-dark border-border-dark text-primary focus:ring-0 rounded-none" type="checkbox"/>
+<span class="text-sm line-through text-muted">Finalize lighting cues (Scene 4)</span>
 </div>
 </div>
 </section>
-<!-- 5: Comms -->
-<section class="view-container flex-col p-0 pb-24 h-full" id="view-comms">
-<div class="p-4 border-b border-border-dark bg-surface/50">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Messenger</h2>
-</div>
-<div class="flex-1 overflow-y-auto">
-<div class="p-4 border-b border-border-dark flex gap-4 hover:bg-surface transition-colors cursor-pointer">
-<div class="size-10 bg-accent-purple/20 border border-accent-purple flex items-center justify-center shrink-0 font-bold">SC</div>
-<div class="flex-1 min-w-0">
-<div class="flex justify-between items-baseline mb-1">
-<h4 class="font-bold text-sm">Sarah Connor</h4>
-<span class="text-[9px] text-accent font-mono">2M AGO</span>
-</div>
-<p class="text-xs text-muted truncate">Availability for the 15th looks good on my end.</p>
-</div>
-</div>
-</div>
-</section>
-<!-- 6: Navigation Intelligence (Google Maps Integration) -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-weather">
-<div class="flex justify-between items-end">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Navigation Intel</h2>
-<span class="number-stat text-[10px] text-accent font-bold">API ACTIVE</span>
-</div>
-<!-- Google Maps High-Fidelity Placeholder -->
-<div class="relative w-full aspect-square border border-border-dark map-placeholder overflow-hidden rounded-sm group">
-<!-- Map Overlay UI -->
-<div class="absolute top-3 left-3 z-20 bg-background-dark/90 border border-border-dark p-2 flex flex-col gap-1 max-w-[180px]">
-<div class="flex items-center gap-2">
-<span class="size-2 bg-accent rounded-full pulse-marker"></span>
-<p class="text-[10px] font-bold uppercase tracking-widest text-accent">Route Optimized</p>
-</div>
-<p class="text-[9px] text-muted">Avoiding heavy congestion on Broadway Ave.</p>
-</div>
-<!-- Detour Alert -->
-<div class="absolute bottom-3 right-3 left-3 z-20 bg-error-container/80 border border-error p-3 flex items-center gap-3 animate-pulse">
-<span class="material-symbols-outlined text-white">warning</span>
-<div class="flex-1">
-<p class="text-[10px] font-bold text-white uppercase tracking-tighter">Detour Alert: Road Closure</p>
-<p class="text-[9px] text-white/80">+12min expected delay on current path.</p>
-</div>
-</div>
-<!-- Simulated Map Visuals -->
-<svg class="absolute inset-0 size-full opacity-30" viewbox="0 0 100 100">
-<path d="M10,20 L40,20 L40,80 L90,80" fill="none" stroke="#2C2D35" stroke-width="2"></path>
-<path d="M0,50 L100,50" fill="none" stroke="#2C2D35" stroke-width="1"></path>
-<path d="M50,0 L50,100" fill="none" stroke="#2C2D35" stroke-width="1"></path>
-<!-- Current Route -->
-<path d="M20,10 C20,10 20,40 50,40 C80,40 80,90 80,90" fill="none" stroke="#e0b6ff" stroke-dasharray="2 1" stroke-width="3"></path>
-</svg>
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-<div class="size-4 bg-accent rounded-full border-2 border-background-dark shadow-[0_0_15px_rgba(0,245,212,0.5)]"></div>
-</div>
-</div>
-<div class="grid grid-cols-2 gap-3">
-<div class="bg-surface border border-border-dark p-4">
-<p class="text-[10px] text-muted uppercase font-bold mb-1">Estimated ETA</p>
-<p class="number-stat text-lg">19:42 <span class="text-xs text-muted">PM</span></p>
-</div>
-<div class="bg-surface border border-border-dark p-4">
-<p class="text-[10px] text-muted uppercase font-bold mb-1">Intelligence</p>
-<p class="number-stat text-lg text-accent">98% <span class="text-xs text-muted">ACC</span></p>
-</div>
-</div>
-</section>
-<!-- 7: Gear -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-gear">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Equipment Tracker</h2>
-<div class="flex flex-col gap-2">
-<div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
-<div>
-<p class="font-bold text-sm">Pioneer CDJ-3000 (Set)</p>
-<p class="text-[10px] text-accent uppercase font-bold">Checked Out</p>
-</div>
-<span class="material-symbols-outlined text-muted">barcode_scanner</span>
-</div>
-<div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
-<div>
-<p class="font-bold text-sm">XLR Master Loom 10m</p>
-<p class="text-[10px] text-primary uppercase font-bold">In Inventory</p>
-</div>
-<span class="material-symbols-outlined text-muted">inventory</span>
-</div>
-</div>
-</section>
-<!-- 8: Leads -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-leads">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Pipeline</h2>
-<div class="bg-surface border-l-2 border-accent p-4">
-<div class="flex justify-between items-start">
-<h4 class="font-bold text-sm">Summer Solstice Gala</h4>
-<span class="number-stat text-[10px] bg-accent/10 text-accent px-2 py-0.5">$8,200</span>
-</div>
-<p class="text-xs text-muted mt-1">Proposal Stage • Due Fri</p>
-</div>
-</section>
-<!-- 9: Proposal -->
-<section class="view-container flex-col gap-4 p-4 pb-24" id="view-proposal">
-<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Proposal Builder</h2>
-<div class="bg-surface border border-border-dark p-4 flex flex-col gap-4">
-<div>
-<label class="text-[10px] font-bold uppercase text-muted mb-1 block">Venue Intelligence</label>
-<div class="bg-background-dark p-3 text-xs text-muted border border-border-dark italic">
-                    Analyzing historical acoustic data for 'The Grand Atrium'...
-                </div>
-</div>
-<button class="w-full bg-primary text-background-dark py-3 font-bold text-sm uppercase tracking-widest">Generate Smart Proposal</button>
-</div>
-</section>
-<!-- 10: Media Player (YouTube & Brave Optimized) -->
-<section class="view-container flex-col gap-4 p-4 pb-24 h-full" id="view-player">
+<!-- 5: Media Player -->
+<section class="view-container flex-col gap-4 p-4 h-full" id="view-player">
 <div class="flex justify-between items-center">
 <h2 class="font-heading font-bold text-lg uppercase tracking-wider">Media Engine</h2>
 <div class="flex items-center gap-1 bg-orange-500/10 border border-orange-500/40 px-2 py-1">
 <span class="material-symbols-outlined text-[12px] text-orange-500">verified_user</span>
-<span class="text-[8px] font-bold text-orange-500 uppercase tracking-widest">Brave Optimized (Ad-Block Ready)</span>
+<span class="text-[8px] font-bold text-orange-500 uppercase tracking-widest">Brave Optimized</span>
 </div>
 </div>
-<!-- Correctly Embedded YouTube Iframe with Overlay -->
-<div class="relative w-full aspect-video bg-black border border-border-dark group">
-<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" class="absolute inset-0 size-full" frameborder="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?controls=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0" title="YouTube video player">
-</iframe>
-<!-- Functional Overlay UI -->
+<div class="relative w-full aspect-video bg-black border border-border-dark group media-pulse-active overflow-hidden">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" class="absolute inset-0 size-full" frameborder="0" src="https://www.youtube.com/embed/jfKfPfyJRdk?controls=0&amp;modestbranding=1&amp;rel=0&amp;autoplay=0" title="YouTube video player"></iframe>
 <div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
 <div class="flex justify-end">
 <span class="bg-background-dark/80 px-2 py-1 text-[10px] font-mono border border-border-dark text-accent">LIVE 1080P</span>
@@ -403,27 +337,121 @@
 <h4 class="font-heading font-bold text-xl text-white">Cybernetic Harmony Vol. 4</h4>
 </div>
 </section>
+<!-- 6: Navigation Intel -->
+<section class="view-container flex-col gap-4 p-4" id="view-weather">
+<div class="flex justify-between items-end">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Navigation Intel</h2>
+<span class="number-stat text-[10px] text-accent font-bold">FLOOD &amp; SEISMIC ACTIVE</span>
+</div>
+<div class="relative w-full aspect-square border border-border-dark map-placeholder overflow-hidden rounded-sm group">
+<div class="absolute top-3 left-3 z-20 bg-background-dark/90 border border-border-dark p-2 flex flex-col gap-1 max-w-[180px]">
+<div class="flex items-center gap-2">
+<span class="size-2 bg-accent rounded-full pulse-marker"></span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-accent">Route Optimized</p>
+</div>
+<p class="text-[9px] text-muted">Avoiding heavy congestion on Broadway Ave.</p>
+</div>
+<div class="absolute bottom-3 right-3 left-3 z-20 bg-error-container/80 border border-error p-3 flex items-center gap-3 animate-pulse">
+<span class="material-symbols-outlined text-white">warning</span>
+<div class="flex-1">
+<p class="text-[10px] font-bold text-white uppercase tracking-tighter">Detour Alert: Road Closure</p>
+<p class="text-[9px] text-white/80">+12min expected delay on current path.</p>
+</div>
+</div>
+<svg class="absolute inset-0 size-full opacity-30" viewbox="0 0 100 100">
+<path d="M10,20 L40,20 L40,80 L90,80" fill="none" stroke="#2C2D35" stroke-width="2"></path>
+<path d="M0,50 L100,50" fill="none" stroke="#2C2D35" stroke-width="1"></path>
+<path d="M50,0 L50,100" fill="none" stroke="#2C2D35" stroke-width="1"></path>
+<path d="M20,10 C20,10 20,40 50,40 C80,40 80,90 80,90" fill="none" stroke="#e0b6ff" stroke-dasharray="2 1" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="size-4 bg-accent rounded-full border-2 border-background-dark shadow-[0_0_15px_rgba(0,245,212,0.5)]"></div>
+</div>
+</div>
+</section>
+<!-- 7: Gear Tracker -->
+<section class="view-container flex-col gap-4 p-4" id="view-gear">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Equipment Tracker</h2>
+<div class="flex flex-col gap-2">
+<div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
+<div>
+<p class="font-bold text-sm">Pioneer CDJ-3000 (Set)</p>
+<p class="text-[10px] text-accent uppercase font-bold">Checked Out</p>
+</div>
+<span class="material-symbols-outlined text-muted">barcode_scanner</span>
+</div>
+<div class="bg-surface border border-border-dark p-4 flex justify-between items-center">
+<div>
+<p class="font-bold text-sm">XLR Master Loom 10m</p>
+<p class="text-[10px] text-primary uppercase font-bold">In Inventory</p>
+</div>
+<span class="material-symbols-outlined text-muted">inventory</span>
+</div>
+</div>
+</section>
+<!-- 8: Leads -->
+<section class="view-container flex-col gap-4 p-4" id="view-leads">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Pipeline</h2>
+<div class="bg-surface border-l-2 border-accent p-4">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-sm">Summer Solstice Gala</h4>
+<span class="number-stat text-[10px] bg-accent/10 text-accent px-2 py-0.5">$8,200</span>
+</div>
+<p class="text-xs text-muted mt-1">Proposal Stage • Due Fri</p>
+</div>
+</section>
+<!-- 9: Proposal Builder -->
+<section class="view-container flex-col gap-4 p-4" id="view-proposal">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Proposal Builder</h2>
+<div class="bg-surface border border-border-dark p-4 flex flex-col gap-4">
+<div>
+<label class="text-[10px] font-bold uppercase text-muted mb-1 block">Venue Intelligence</label>
+<div class="bg-background-dark p-3 text-xs text-muted border border-border-dark italic">
+                            Analyzing historical acoustic data for 'The Grand Atrium'...
+                        </div>
+</div>
+<button class="w-full bg-primary text-background-dark py-3 font-bold text-sm uppercase tracking-widest">Generate Smart Proposal</button>
+</div>
+</section>
+<!-- 10: Messenger -->
+<section class="view-container flex-col p-0 h-full" id="view-comms">
+<div class="p-4 border-b border-border-dark bg-surface/50">
+<h2 class="font-heading font-bold text-lg uppercase tracking-wider">Messenger</h2>
+</div>
+<div class="flex-1 overflow-y-auto">
+<div class="p-4 border-b border-border-dark flex gap-4 hover:bg-surface transition-colors cursor-pointer">
+<div class="size-10 bg-accent-purple/20 border border-accent-purple flex items-center justify-center shrink-0 font-bold">SC</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h4 class="font-bold text-sm">Sarah Connor</h4>
+<span class="text-[9px] text-accent font-mono">2M AGO</span>
+</div>
+<p class="text-xs text-muted truncate">Availability for the 15th looks good on my end.</p>
+</div>
+</div>
+</div>
+</section>
 </main>
-<!-- Navigation Chrome (As per SCREEN_3 design) -->
+<!-- Navigation Chrome -->
 <nav class="fixed bottom-0 left-0 right-0 bg-background-dark/95 backdrop-blur-md border-t border-border-dark z-40 safe-area-bottom">
 <div class="flex h-16 items-center">
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-primary" data-view="overview" onclick="showView('overview')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-primary transition-all active:scale-90" data-view="overview" onclick="showView('overview')">
 <span class="material-symbols-outlined text-[24px]">grid_view</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Overview</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Dash</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="data" onclick="showView('data')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="player" onclick="showView('player')">
+<span class="material-symbols-outlined text-[24px]">play_circle</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Media</span>
+</button>
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="data" onclick="showView('data')">
 <span class="material-symbols-outlined text-[24px]">insights</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Data</span>
+<span class="text-[9px] font-bold uppercase tracking-tighter">Stats</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="plan" onclick="showView('plan')">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" data-view="plan" onclick="showView('plan')">
 <span class="material-symbols-outlined text-[24px]">calendar_month</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">Plan</span>
 </button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" data-view="ops" onclick="showView('ops')">
-<span class="material-symbols-outlined text-[24px]">fact_check</span>
-<span class="text-[9px] font-bold uppercase tracking-tighter">Ops</span>
-</button>
-<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted" onclick="toggleMoreMenu(true)">
+<button class="nav-item flex-1 flex flex-col items-center justify-center gap-1 text-muted transition-all active:scale-90" onclick="toggleMoreMenu(true)">
 <span class="material-symbols-outlined text-[24px]">more_horiz</span>
 <span class="text-[9px] font-bold uppercase tracking-tighter">More</span>
 </button>
@@ -434,7 +462,10 @@
 <div class="absolute inset-0 bg-background-dark/80 opacity-0 transition-opacity duration-300" id="menu-overlay" onclick="toggleMoreMenu(false)"></div>
 <div class="absolute right-0 top-0 bottom-0 w-64 bg-surface border-l border-border-dark translate-x-full transition-transform duration-300 pointer-events-auto p-6 flex flex-col gap-6" id="menu-content">
 <div class="flex justify-between items-center border-b border-border-dark pb-4">
+<div class="flex items-center gap-2">
+<img alt="Logo" class="size-6 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBMKWcwSDE5SQs8eVa154nrTwJioyZYbGcllrVkhK7_wi5FOQ-cJfjruJNpv7rhrSjdSGYeo_kHu3mJDOXNG-V3dQrH7gRg-H8GNoK2cPzaG931RuoYLAVpqSMxgckdft5XzQzyxlhIvIUogbjaKV0POVnAPuiaa6zUknDpYoUeWJPvnH_WNm7ze-hsU9L2gSbgnxL5YF3ESpcJ5Il-s8DZSeud2eX-o8pHHyikt8GCi6lHMKU4hFdjoSiAjKYx1b7Yw"/>
 <h3 class="font-heading font-bold text-lg uppercase tracking-tight">System</h3>
+</div>
 <button class="size-10 flex items-center justify-center text-muted" onclick="toggleMoreMenu(false)"><span class="material-symbols-outlined">close</span></button>
 </div>
 <nav class="flex flex-col gap-1">
@@ -454,9 +485,9 @@
 <span class="material-symbols-outlined text-muted">description</span>
 <span class="text-sm font-medium">Proposal Builder</span>
 </button>
-<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('player'); toggleMoreMenu(false)">
-<span class="material-symbols-outlined text-muted">play_circle</span>
-<span class="text-sm font-medium">Media Engine</span>
+<button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('ops'); toggleMoreMenu(false)">
+<span class="material-symbols-outlined text-muted">fact_check</span>
+<span class="text-sm font-medium">Ops &amp; Tasks</span>
 </button>
 <button class="flex items-center gap-3 p-3 hover:bg-background-dark text-left" onclick="showView('comms'); toggleMoreMenu(false)">
 <span class="material-symbols-outlined text-muted">chat</span>
@@ -473,57 +504,78 @@
 </div>
 </div>
 </div>
+</div>
 <script>
-    /**
-     * View Controller - Robust SPA Logic
-     */
-    function showView(viewId) {
-        // 1. Manage Active States for Containers
-        const views = document.querySelectorAll('.view-container');
-        views.forEach(v => v.classList.remove('active'));
-
-        const target = document.getElementById(`view-${viewId}`);
-        if (target) {
-            target.classList.add('active');
-            // Scroll to top on transition
-            document.getElementById('view-root').scrollTo({ top: 0, behavior: 'smooth' });
+        /**
+         * Splash Screen Controller
+         */
+        function handleSplashScreen() {
+            const splash = document.getElementById('splash-screen');
+            const mainApp = document.getElementById('main-app');
+            
+            // Artificial delay for high-impact splash effect
+            setTimeout(() => {
+                splash.classList.add('opacity-0');
+                mainApp.classList.remove('opacity-0');
+                mainApp.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 700);
+            }, 3000);
         }
 
-        // 2. Manage Bottom Nav active state
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            if (item.getAttribute('data-view') === viewId) {
-                item.classList.add('text-primary');
-                item.classList.remove('text-muted');
-            } else {
-                item.classList.remove('text-primary');
-                item.classList.add('text-muted');
+        /**
+         * View Controller - Robust SPA Logic
+         */
+        function showView(viewId) {
+            // 1. Manage Active States for Containers
+            const views = document.querySelectorAll('.view-container');
+            views.forEach(v => v.classList.remove('active'));
+
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) {
+                target.classList.add('active');
+                // Scroll to top on transition
+                document.getElementById('view-root').scrollTo({ top: 0, behavior: 'smooth' });
             }
-        });
-    }
 
-    /**
-     * Side Menu Toggle
-     */
-    function toggleMoreMenu(isOpen) {
-        const menu = document.getElementById('more-menu');
-        const overlay = document.getElementById('menu-overlay');
-        const content = document.getElementById('menu-content');
-
-        if (isOpen) {
-            menu.classList.remove('pointer-events-none');
-            overlay.classList.add('opacity-100');
-            content.classList.remove('translate-x-full');
-        } else {
-            menu.classList.add('pointer-events-none');
-            overlay.classList.remove('opacity-100');
-            content.classList.add('translate-x-full');
+            // 2. Manage Bottom Nav active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.getAttribute('data-view') === viewId) {
+                    item.classList.add('text-primary');
+                    item.classList.remove('text-muted');
+                } else {
+                    item.classList.remove('text-primary');
+                    item.classList.add('text-muted');
+                }
+            });
         }
-    }
 
-    // Initialize - ensure we always start at Overview
-    window.addEventListener('DOMContentLoaded', () => {
-        showView('overview');
-    });
-</script>
+        /**
+         * Side Menu Toggle
+         */
+        function toggleMoreMenu(isOpen) {
+            const menu = document.getElementById('more-menu');
+            const overlay = document.getElementById('menu-overlay');
+            const content = document.getElementById('menu-content');
+
+            if (isOpen) {
+                menu.classList.remove('pointer-events-none');
+                overlay.classList.add('opacity-100');
+                content.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('pointer-events-none');
+                overlay.classList.remove('opacity-100');
+                content.classList.add('translate-x-full');
+            }
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            handleSplashScreen();
+            showView('overview');
+        });
+    </script>
 </body></html>
