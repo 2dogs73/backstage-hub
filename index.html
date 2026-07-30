@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#0A0A0B" name="theme-color"/>
+<title>Backstage - Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&amp;family=Work+Sans:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#9D4EDD",
+          "background-dark": "#0A0A0B",
+          "surface": "#16161A",
+          "text-main": "#F8F9FA",
+          "muted": "#8D909B",
+          "accent": "#00F5D4",
+          "border-dark": "#2C2D35"
+        },
+        fontFamily: {
+          "heading": ["Space Grotesk", "sans-serif"],
+          "body": ["Work Sans", "sans-serif"],
+          "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+        },
+        borderRadius: {
+          "DEFAULT": "0px",
+          "sm": "0px",
+          "md": "0px",
+          "lg": "0px",
+          "xl": "0px",
+          "2xl": "0px",
+          "3xl": "0px",
+          "full": "0px"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background-color: #0A0A0B;
+    color: #F8F9FA;
+    -webkit-font-smoothing: antialiased;
+    user-select: none; /* Prevent accidental text selection on non-interactive areas */
+    -webkit-tap-highlight-color: transparent; /* Cleaner native app feel */
+  }
+  
+  /* Allow selection in specific interactive or content areas if needed, 
+     but by default keep it restricted for a UI feel */
+  input, textarea, [contenteditable="true"] {
+    user-select: auto;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .number-stat {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .animate-blink {
+    animation: blink 2s ease-in-out infinite;
+  }
+  
+  /* Safe area handling for bottom nav */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  body {
+    min-height: max(884px, 100dvh);
+  }
+</style>
+</head>
+<body class="bg-background-dark text-text-main h-screen flex flex-col overflow-hidden selection:bg-primary selection:text-white">
+<!-- Fixed Top Navigation -->
+<header class="h-16 flex items-center justify-between px-4 border-b border-border-dark bg-background-dark shrink-0 z-10 sticky top-0">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-surface border border-border-dark flex items-center justify-center overflow-hidden"><img alt="Backstage Logo" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLvvhRo4YexnupyumlPS6urtEqrq78Mp700r6DpDWaShvvBjtKaKEuwl1wO1YsR6WyIHCe_Ac8rQw53FVxIfNfZ5eRZh_u2FxJM69SQpXID5AN4-YNfax58s8rR0E-_fV7ZSQ0Cygmbk6pwN1UDAIVooduvPjv8xZeKtL3Cz9dhgor2udJFmuyAhV1IyLq443XIOuhHJT0bjvax80H6xYAcGIGRox0oFpxVS8hWJe2hiooh0AImwJtcLrk4"/></div>
+<h1 class="font-heading font-bold text-xl tracking-tight">BACKSTAGE</h1>
+</div>
+<div class="flex items-center gap-4">
+<!-- Comms Indicator -->
+<button class="relative size-12 flex items-center justify-center bg-surface border border-border-dark hover:border-muted transition-colors group cursor-pointer" onclick="document.getElementById('comms-modal').classList.toggle('translate-y-full')">
+<span class="material-symbols-outlined text-muted group-hover:text-text-main transition-colors">chat</span>
+<!-- WhatsApp Ping Dot -->
+<span class="absolute top-2.5 right-2.5 size-2.5 bg-accent rounded-full animate-blink border border-background-dark"></span>
+</button>
+<!-- Live Traffic Pill -->
+<div class="flex items-center gap-2 h-12 px-3 bg-surface border border-border-dark">
+<span class="size-2 bg-accent rounded-full animate-blink shadow-[0_0_8px_rgba(0,245,212,0.6)]"></span>
+<span class="number-stat text-accent text-sm font-bold tracking-wider">12 LIVE</span>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<main class="flex-1 overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-6 pb-32">
+<!-- Next Gig Card -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="font-heading font-bold text-lg tracking-tight uppercase text-muted">Next Event</h2>
+<span class="text-xs font-medium text-primary">In 4 Hours</span>
+</div>
+<div class="bg-surface border border-border-dark border-l-4 border-l-primary p-4 flex flex-col gap-4 relative overflow-hidden group cursor-pointer hover:bg-[#1a1a1f] transition-colors min-h-[120px]">
+<!-- Optional animated background accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="flex flex-col gap-1 z-10">
+<p class="number-stat text-sm text-accent">20:00 - 23:30</p>
+<h3 class="font-heading font-bold text-2xl tracking-tight text-white group-hover:text-primary transition-colors">Neon Gala Showcase</h3>
+<p class="text-muted text-sm flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+            The Grand Atrium, Downtown
+          </p>
+</div>
+<div class="flex items-center gap-3 pt-4 border-t border-border-dark/50 z-10">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-surface bg-background-dark flex items-center justify-center text-xs font-bold">JD</div>
+<div class="size-8 rounded-full border-2 border-surface bg-background-dark flex items-center justify-center text-xs font-bold text-accent">SK</div>
+</div>
+<p class="text-xs text-muted font-medium uppercase tracking-wider">2 Performers Booked</p>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-muted group-hover:text-text-main transition-colors">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2x2 Metric Grid -->
+<section class="grid grid-cols-2 gap-3">
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-32 relative overflow-hidden">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Today's Views</p>
+<p class="number-stat text-3xl font-bold">2,481</p>
+<div class="absolute bottom-0 left-0 w-full h-0.5 bg-border-dark">
+<div class="h-full bg-accent w-3/4"></div>
+</div>
+</div>
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-32 relative overflow-hidden">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">New Leads</p>
+<div class="flex items-end gap-2">
+<p class="number-stat text-3xl font-bold">14</p>
+<p class="text-accent text-sm font-medium mb-1">+3 today</p>
+</div>
+</div>
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-32 relative overflow-hidden">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Pending Tasks</p>
+<p class="number-stat text-3xl font-bold text-primary">5</p>
+</div>
+<div class="bg-surface border border-border-dark p-4 flex flex-col justify-between h-32 relative overflow-hidden">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Revenue (MTD)</p>
+<p class="number-stat text-2xl font-bold">$12.4k</p>
+</div>
+</section>
+<!-- Operations / Tasks -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="font-heading font-bold text-lg tracking-tight uppercase text-muted">Action Required</h2>
+<button class="min-h-[48px] px-2 text-xs font-medium text-primary uppercase tracking-wider hover:text-accent transition-colors">View All</button>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Task Item 1 -->
+<label class="flex items-center gap-4 bg-surface border border-border-dark p-4 cursor-pointer hover:border-muted transition-colors min-h-[60px]">
+<input class="form-checkbox size-6 bg-background-dark border-border-dark text-primary focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer" type="checkbox"/>
+<span class="text-sm font-medium">Send contract to Smith Wedding</span>
+</label>
+<!-- Task Item 2 -->
+<label class="flex items-center gap-4 bg-surface border border-border-dark p-4 cursor-pointer hover:border-muted transition-colors min-h-[60px]">
+<input class="form-checkbox size-6 bg-background-dark border-border-dark text-primary focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer" type="checkbox"/>
+<span class="text-sm font-medium">Confirm call time for Neon Gala</span>
+</label>
+<!-- Task Item 3 (Completed) -->
+<label class="flex items-center gap-4 bg-surface border border-border-dark p-4 opacity-50 cursor-pointer min-h-[60px]">
+<input checked="" class="form-checkbox size-6 bg-background-dark border-border-dark text-primary focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer" type="checkbox"/>
+<span class="text-sm font-medium line-through">Invoice Corporate Retreat</span>
+</label>
+</div>
+</section>
+</main>
+<!-- Slide-up Modal (Comms) -->
+<div class="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] top-20 bg-surface border-t border-border-dark transform translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] z-40 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]" id="comms-modal">
+<div class="p-4 border-b border-border-dark flex items-center justify-between bg-[#1a1a1f]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent">chat</span>
+<h3 class="font-heading font-bold text-lg">Unread Comms</h3>
+</div>
+<button class="p-2 min-w-[48px] min-h-[48px] text-muted hover:text-white flex items-center justify-center" onclick="document.getElementById('comms-modal').classList.add('translate-y-full')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-0">
+<!-- Message 1 -->
+<div class="p-4 border-b border-border-dark bg-background-dark/50 flex gap-4 cursor-pointer hover:bg-surface min-h-[80px]">
+<div class="size-12 bg-primary/20 border border-primary flex items-center justify-center shrink-0">
+<span class="font-heading font-bold text-primary">SC</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h4 class="font-bold text-sm truncate">Sarah Connor</h4>
+<span class="text-[10px] text-accent font-mono uppercase">2m ago</span>
+</div>
+<p class="text-sm text-text-main truncate">Hey, are you guys available for the 15th? Looking for fire dancers.</p>
+</div>
+<div class="size-2.5 bg-accent rounded-full mt-2 shrink-0"></div>
+</div>
+<!-- Message 2 -->
+<div class="p-4 border-b border-border-dark flex gap-4 cursor-pointer hover:bg-surface min-h-[80px]">
+<div class="size-12 bg-border-dark border border-muted flex items-center justify-center shrink-0">
+<span class="font-heading font-bold text-muted">MR</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h4 class="font-bold text-sm truncate text-muted">Mike Richards</h4>
+<span class="text-[10px] text-muted font-mono uppercase">1h ago</span>
+</div>
+<p class="text-sm text-muted truncate">Thanks for the invoice, will process today.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Shared Component: BottomNavBar -->
+<div class="fixed bottom-0 left-0 right-0 flex h-auto w-full flex-col bg-[#151118] border-t border-[#312839] z-50 shrink-0 safe-area-bottom" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex gap-2 bg-[#16161A] px-4 pb-4 pt-3 h-20 items-center">
+<!-- Overview (Active) -->
+<a class="just flex flex-1 flex-col items-center justify-center gap-1 text-primary min-h-[48px]" href="#">
+<div class="text-primary flex h-8 items-center justify-center" data-icon="SquaresFour" data-size="24px" data-weight="fill">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+</div>
+<span class="text-[10px] font-medium tracking-wide uppercase">Overview</span>
+</a>
+<!-- Analytics -->
+<a class="just flex flex-1 flex-col items-center justify-center gap-1 text-[#8D909B] hover:text-white transition-colors min-h-[48px]" href="#">
+<div class="text-[#8D909B] flex h-8 items-center justify-center" data-icon="ChartLineUp" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">insights</span>
+</div>
+<span class="text-[10px] font-medium tracking-wide uppercase">Data</span>
+</a>
+<!-- Schedule -->
+<a class="just flex flex-1 flex-col items-center justify-center gap-1 text-[#8D909B] hover:text-white transition-colors min-h-[48px]" href="#">
+<div class="text-[#8D909B] flex h-8 items-center justify-center" data-icon="Calendar" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<span class="text-[10px] font-medium tracking-wide uppercase">Plan</span>
+</a>
+<!-- Operations -->
+<a class="just flex flex-1 flex-col items-center justify-center gap-1 text-[#8D909B] hover:text-white transition-colors min-h-[48px]" href="#">
+<div class="text-[#8D909B] flex h-8 items-center justify-center" data-icon="ListChecks" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">fact_check</span>
+</div>
+<span class="text-[10px] font-medium tracking-wide uppercase">Ops</span>
+</a>
+<!-- Comms -->
+<a class="just flex flex-1 flex-col items-center justify-center gap-1 text-[#8D909B] hover:text-white transition-colors relative min-h-[48px]" href="#">
+<div class="text-[#8D909B] flex h-8 items-center justify-center" data-icon="ChatTeardropText" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">forum</span>
+</div>
+<span class="text-[10px] font-medium tracking-wide uppercase">Comms</span>
+<span class="absolute top-2 right-4 size-2 bg-accent rounded-full border border-[#16161A]"></span>
+</a>
+</div>
+</div>
+</body></html>
